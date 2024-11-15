@@ -1,0 +1,25 @@
+---
+import { GET } from './api/search.ts'
+import './styles.css'
+
+const query = Astro.url.searchParams.get('query') || '';
+const page = parseInt(Astro.url.searchParams.get('page') || '0');
+
+const response = await GET(Astro);
+const data = await response.json();
+
+interface Book {
+    title: string,
+    description: string
+};
+
+const books: Book[] = data.books;
+const totalPages = Math.ceil(data.bookCount[0].value / 4)
+---
+
+<h2>Home Page</h2>
+
+<form action="/search/" method="get">
+    <input type="text" name="query" placeholder="Search..." value={query}>
+    <button type="submit">Search</button>
+</form>
